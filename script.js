@@ -29,6 +29,11 @@ function draw() {
 
   noStroke();
 
+  // CREATE MULTIPLE COLOR PALLETES (ARRAYS, CAN ALSO USE BUTTONS)
+  // DIFFERENT # OF EACH SHAPE
+  // ADD MOVEMENT/ROTATION???
+  // MOUSE INTERACTION NEEDED
+
   // draw
   for (let i=0; i < 25; i++) {
     fill(random(color_array));
