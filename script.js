@@ -5,12 +5,25 @@ let seed = 12345;
 const canvas_X = 850;
 const canvas_Y = 450;
 // shape size
-const size_low = 75;
+const size_low = 100;
 const size_high = 150;
 
-const color_array = ['orange', 'yellow', 'green', 'blue', 'pruple', 'pink', 'red'];
+// color palettes
+const basic1 = ['orange', 'yellow', 'red'];
+const basic2 = ['white', 'grey', 'black'];
+const blues = ['#022f40', '#38AECC', '#0090C1', '#183446', '#046E8F'];
+const pinks = ['#DEF6CA', '#F8BDC4', '#F497DA', '#F679E5', '#F65BE3']
+const purples = ['#210B2C', '#55286F', '#BC96E6', '#D8B4E2', '#AE759F'];
+const mix1 = ['#000000', '#FFFFFF', '#494949', '#7C7A7A', '#FF5D73'];
+const mix2 = ['#AA1155', '#880044', '#DD1155', '#FFEE88', '#00CC99'];
+const mix3 = ['#F3B700', '#F3B700', '#086788'];
+let color_array = blues;
 
-const sunColor = [254,254,254,80]; // with opacity
+// background colors
+const bk_color1 = 'black';
+const bk_color2 = 'grey';
+const bk_color3 = 'white';
+let bk_color = bk_color1;
 
 function preload() {
     // runs before setup 
@@ -19,29 +32,48 @@ function preload() {
 
 function setup() {
   createCanvas(800, 400);
-  createButton("reroll").mousePressed(() => seed++);
+  createButton("Reroll").mousePressed(() => seed++);
+  createButton("Palette: Blues").mousePressed(() => color_array = blues);
+  createButton("Palette: Pinks").mousePressed(() => color_array = pinks);
+  createButton("Palette: Purples").mousePressed(() => color_array = purples);
+  createButton("Palette: Mix1").mousePressed(() => color_array = mix1);
+  createButton("Palette: Mix2").mousePressed(() => color_array = mix2);
+  createButton("Palette: Mix3").mousePressed(() => color_array = mix3);
+  bk_button1 = createButton("Background: Black").mousePressed(() => bk_color = bk_color1);
+  bk_button1.position(7, 450);
+  bk_button2 = createButton("Background: Grey").mousePressed(() => bk_color = bk_color2);
+  bk_button2.position(129, 450);
+  bk_button1 = createButton("Background: White").mousePressed(() => bk_color = bk_color3);
+  bk_button1.position(247, 450);
 }
 
 function draw() {
   randomSeed(seed);
-
-  background('black');
-
+  background(bk_color);
   noStroke();
 
-  // CREATE MULTIPLE COLOR PALLETES (ARRAYS, CAN ALSO USE BUTTONS)
-  // DIFFERENT # OF EACH SHAPE
-  // ADD MOVEMENT/ROTATION???
-  // MOUSE INTERACTION NEEDED
-
-  // draw
+  // draw shapes
   for (let i=0; i < 25; i++) {
     fill(random(color_array));
     draw_rect();
     fill(random(color_array));
     draw_tri();
     fill(random(color_array));
-    draw_cir();
+    draw_cir();    
+
+    
+    // translate(1, 1);
+    // translate(p5.Vector.fromAngle(millis() / 1000, 5));
+
+    // change scaling
+    if (key === 'z') {
+      scale(1.01);
+    } else if (key === 'x') {
+      scale(0.99);
+    }
+    else {
+      scale(1);
+    }
   }
     
   function draw_rect() {
@@ -68,104 +100,5 @@ function draw() {
     let y3 = random(y2 - size_high, y2 + size_high);
     triangle(x1, y1, x2, y2, x3, y3);
   }  
-
-
-  // -----------------------------
-  // fill(skyColor);
-  // rect(0, 0, width, height / 2);
-
-  // // An example of making something respond to the mouse
-  // fill(...sunColor);
-  // ellipse(mouseX,0,30,30);
-  // ellipse(mouseX,0,50,50);
-  // ellipse(mouseX,0,100,100);
-  // ellipse(mouseX,0,200,200);
-
-  // fill(grassColor);
-  // rect(0, height / 2, width, height / 2);
-
-  // // An example of drawing an irregular polygon
-  // fill(hillColor);
-  // beginShape();
-  // vertex(0, height / 2);
-  // const steps = 10;
-  // for (let i = 0; i < steps + 1; i++) {
-  //   let x = (width * i) / steps;
-  //   let y =
-  //     height / 2 - (random() * random() * random() * height) / 8 - height / 50;
-  //   vertex(x, y);
-  // }
-  // vertex(width, height / 2);
-  // endShape(CLOSE);
-
-  // const trees = 5*random();
-  // for (let i = 0; i < trees; i++) {
-  //   drawLtree();
-  // }
-
-  // // An example of recursively drawing an L-tree 
-  // function drawLtree() {
-  //   let x = width * random();
-  //   let y = height/2 + height/8 * random();
-  //   let s = width/200 + (y - height/2)/2;
-  //   let jitter = (mouseX - width/2) / width * 2 * Math.PI / 180;
-  //   drawLtreeBranch(x, y, s, (-90 * Math.PI / 180) + jitter, 0, 5); // this angle points north (0 is east)
-  // }  
-
-  // function drawLtreeBranch(x, y, s, angle, max_limit, branch_weight) { // s is length of a segment
-  //   stroke(treeColor);
-  //   strokeWeight(branch_weight);
-  //   let v = p5.Vector.fromAngle(angle, s);
-  //   let vx = v.x;
-  //   let vy = v.y; 
-  //   let x1 = x;
-  //   let y1 = y; 
-  //   let x2 = x1 + vx;
-  //   let y2 = y1 + vy;
-  //   line(x1, y1, x2, y2);
-
-  //   let new_s = s * 0.7;
-  //   let new_max = max_limit + random();
-  //   let new_branch_weight = branch_weight - 1;
-  //   new_branch_weight = max(new_branch_weight, 1);
-
-  //   if (max_limit < 3) {
-  //       if (random() < 1/3) {
-  //           drawLtreeBranch(x2, y2, new_s, (-35 * Math.PI / 180) + angle, new_max, new_branch_weight);
-  //       } else if (random() > 1/3) {
-  //           drawLtreeBranch(x2, y2, new_s, (35 * Math.PI / 180) + angle, new_max, new_branch_weight);
-  //       } else {
-  //           drawLtreeBranch(x2, y2, new_s, (-35 * Math.PI / 180) + angle, new_max, new_branch_weight);
-  //           drawLtreeBranch(x2, y2, new_s, (35 * Math.PI / 180) + angle, new_max, new_branch_weight);
-  //       }
-  //       drawLtreeBranch(x2, y2, new_s, angle, new_max, new_branch_weight);
-  //   }
-  //   else {
-  //       if (random() < 1/3) {
-  //           drawLeave(x2, y2, new_s, (-35 * Math.PI / 180) + angle);
-  //       } else if (random() > 1/3) {
-  //           drawLeave(x2, y2, new_s, (35 * Math.PI / 180) + angle);
-  //       } else {
-  //           drawLeave(x2, y2, new_s, (-35 * Math.PI / 180) + angle);
-  //           drawLeave(x2, y2, new_s, (35 * Math.PI / 180) + angle);
-  //       }
-  //   }
-
-  // }
-
-  // function drawLeave(x, y, s, angle) {
-  //   fill(leaveColor);
-  //   noStroke();
-  //   let v = p5.Vector.fromAngle(angle, s);
-  //   let vx = v.x;
-  //   let vy = v.y; 
-  //   let x1 = x;
-  //   let y1 = y; 
-  //   let x2 = x1 + vx;
-  //   let y2 = y1 + vy;
-  //   line(x1, y1, x2, y2);
-  //   circle(x2, y2, 3);
-
-  // }
 }
 
